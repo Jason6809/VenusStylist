@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "705845652616",
+    "firebase_url": "https://project-venus-520.firebaseio.com",
+    "project_id": "project-venus-520",
+    "storage_bucket": "project-venus-520.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705845652616:android:76732c82bbd9a083a8033d",
+        "android_client_info": {
+          "package_name": "com.awesomefyp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705845652616-b9979qgg6pn5qf56l3k7qcda2t65681c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaV7M5mQY06atYbzQWQAGaJt0-_9B4dI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705845652616-b9979qgg6pn5qf56l3k7qcda2t65681c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705845652616:android:04c626d9cf2ae9eaa8033d",
+        "android_client_info": {
+          "package_name": "com.venusstylist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705845652616-b9979qgg6pn5qf56l3k7qcda2t65681c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaV7M5mQY06atYbzQWQAGaJt0-_9B4dI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705845652616-b9979qgg6pn5qf56l3k7qcda2t65681c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
