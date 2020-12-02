@@ -6,6 +6,7 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import { createDrawerNavigator, DrawerActions } from 'react-navigation-drawer';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { Transition } from 'react-native-reanimated';
+import 'react-native-gesture-handler';
 
 import { Screen, View, Title, Subtitle, Icon, Button } from '@shoutem/ui';
 

@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
-  StyleSheet,
   FlatList,
   SectionList,
   RefreshControl,
@@ -11,8 +10,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-picker';
-import DateTimePicker from 'react-native-modal-datetime-picker';
-import {TextInputMask} from 'react-native-masked-text';
+import { TextInputMask } from 'react-native-masked-text';
 
 import {
   Screen,
@@ -23,49 +21,56 @@ import {
   Text,
   TextInput,
   Caption,
-  Tile,
   Button,
-  Switch,
   Icon,
-  Row,
-  TouchableOpacity,
-  Card,
   Image,
-  ImageBackground,
   Lightbox,
-  Overlay,
   Divider,
 } from '@shoutem/ui';
 
 import Colors from '../constants/Colors';
-
-import moment from 'moment';
 
 import RNFetchBlob from 'react-native-fetch-blob';
 const Blob = RNFetchBlob.polyfill.Blob;
 window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 window.Blob = Blob;
 
+// Issue https://github.com/wkh237/react-native-fetch-blob/wiki/Trouble-Shooting#failed-to-execute-readastext-on-filereader
+const Fetch = RNFetchBlob.polyfill.Fetch
+// replace built-in fetch
+window.fetch = new Fetch({
+  // enable this option so that the response data conversion handled automatically
+  auto: true,
+  // when receiving response data, the module will match its Content-Type header
+  // with strings in this array. If it contains any one of string in this array, 
+  // the response body will be considered as binary data and the data will be stored
+  // in file system instead of in memory.
+  // By default, it only store response data to file system when Content-Type 
+  // contains string `application/octet`.
+  binaryContentTypes: [
+    'image/',
+    'video/',
+    'audio/',
+    'foo/',
+  ]
+}).build()
+
 import firebase from 'react-native-firebase';
 const AUTH = firebase.auth();
 const DATABASE = firebase.firestore();
-const STORAGE = firebase.storage();
-const FUNCTIONS = firebase.functions();
-const MESSAGING = firebase.messaging();
-const NOTIFICATIONS = firebase.notifications();
 
 const SCREEN = 'ManageMarketScreen: ';
 
 export class ManageMarketScreen extends Component {
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerRight: (
         <Button
-          style={{marginRight: 15, paddingLeft: 10}}
+          style={{ marginRight: 15, paddingLeft: 10 }}
           styleName="secondary"
           onPress={navigation.getParam('toggleProductEditorVisible')}>
-          <Caption style={{color: 'white'}}>ADD</Caption>
-          <Icon style={{margin: 0}} name="plus-button" />
+          <Caption style={{ color: 'white' }}>ADD</Caption>
+          <Icon style={{ margin: 0 }} name="plus-button" />
         </Button>
       ),
     };
@@ -166,7 +171,7 @@ export class ManageMarketScreen extends Component {
 
     const productTypes = [];
     for (const ProductType of ProductTypes.docs) {
-      const {productTypeKey, productTypeName} = ProductType.data();
+      const { productTypeKey, productTypeName } = ProductType.data();
 
       productTypes.push({
         productTypeKey,
@@ -312,7 +317,7 @@ export class ManageMarketScreen extends Component {
   _handleProductPic() {
     const TAG = '_handleProductPic: ';
 
-    ImagePicker.showImagePicker({maxWidth: 512}, response => {
+    ImagePicker.showImagePicker({ maxWidth: 512 }, response => {
       console.log(SCREEN, TAG, 'Response = ', response);
 
       if (response.didCancel) {
@@ -501,7 +506,7 @@ export class ManageMarketScreen extends Component {
 
     const currentUser = AUTH.currentUser;
 
-    const {productPic, productName, selectedProductType} = this.state;
+    const { productPic, productName, selectedProductType } = this.state;
 
     const ProductRef = DATABASE.collection('Products');
     try {
@@ -590,7 +595,7 @@ export class ManageMarketScreen extends Component {
       error: null,
     });
 
-    const {selectedItemKey} = this.state;
+    const { selectedItemKey } = this.state;
 
     const ProductRef = DATABASE.collection('Products').doc(selectedItemKey);
 
@@ -629,7 +634,7 @@ export class ManageMarketScreen extends Component {
       isLoaderVisible: true,
     });
 
-    const {selectedItemKey, variantName, price, quantity} = this.state;
+    const { selectedItemKey, variantName, price, quantity } = this.state;
 
     const ProductRef = DATABASE.collection('Products').doc(selectedItemKey);
 
@@ -718,7 +723,7 @@ export class ManageMarketScreen extends Component {
       isLoaderVisible: true,
     });
 
-    const {selectedItemKey, selectedProductVariant} = this.state;
+    const { selectedItemKey, selectedProductVariant } = this.state;
 
     const ProductRef = DATABASE.collection('Products').doc(selectedItemKey);
 
@@ -749,9 +754,9 @@ export class ManageMarketScreen extends Component {
     const TAG = '_addVariantPhotos: ';
     console.log(SCREEN, TAG, 'start... ');
 
-    const {selectedItemKey, selectedProductVariant} = this.state;
+    const { selectedItemKey, selectedProductVariant } = this.state;
 
-    ImagePicker.showImagePicker({maxWidth: 512}, async response => {
+    ImagePicker.showImagePicker({ maxWidth: 512 }, async response => {
       console.log(SCREEN, TAG, 'Response = ', response);
 
       if (response.didCancel) {
@@ -828,7 +833,7 @@ export class ManageMarketScreen extends Component {
       isLoaderVisible: true,
     });
 
-    const {selectedItemKey, selectedProductVariant} = this.state;
+    const { selectedItemKey, selectedProductVariant } = this.state;
 
     const ProductRef = DATABASE.collection('Products').doc(selectedItemKey);
 
@@ -863,7 +868,7 @@ export class ManageMarketScreen extends Component {
     });
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   render() {
     const {
@@ -900,7 +905,7 @@ export class ManageMarketScreen extends Component {
           animated={true}
         />
 
-        <View style={{flex: 1, backgroundColor: 'white'}}>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
           {!productItems && (
             <View styleName="flexible stretch vertical v-center">
               <ActivityIndicator size="large" color={Colors.Dark} />
@@ -946,16 +951,16 @@ export class ManageMarketScreen extends Component {
               }
               sections={productItems}
               keyExtractor={item => item.id}
-              renderSectionHeader={({section: {title}}) => (
+              renderSectionHeader={({ section: { title } }) => (
                 <View styleName="lg-gutter-top">
                   <Title styleName="md-gutter-bottom">{title}</Title>
                   <Divider styleName="section-header">
-                    <Caption style={{color: Colors.Dark}}>PRODUCT</Caption>
-                    <Caption style={{color: Colors.Dark}}>EDIT</Caption>
+                    <Caption style={{ color: Colors.Dark }}>PRODUCT</Caption>
+                    <Caption style={{ color: Colors.Dark }}>EDIT</Caption>
                   </Divider>
                 </View>
               )}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <View>
                   <Divider styleName="line" />
                   <View styleName="md-gutter horizontal v-center space-between">
@@ -976,7 +981,7 @@ export class ManageMarketScreen extends Component {
                       </View>
                     </View>
                     <View styleName="flexible">
-                      <Caption style={{color: Colors.Dark}}>
+                      <Caption style={{ color: Colors.Dark }}>
                         {item.productName}
                       </Caption>
                     </View>
@@ -1025,7 +1030,7 @@ export class ManageMarketScreen extends Component {
         </View>
 
         <Modal
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           isVisible={isProductEditorVisible}
           useNativeDriver={true}
           hideModalContentWhileAnimating={true}
@@ -1045,7 +1050,7 @@ export class ManageMarketScreen extends Component {
           }}>
           <NavigationBar
             style={{
-              container: {elevation: 3, height: 56},
+              container: { elevation: 3, height: 56 },
             }}
             styleName="inline"
             leftComponent={
@@ -1069,7 +1074,7 @@ export class ManageMarketScreen extends Component {
               </Button>
             }
             centerComponent={
-              <View style={{width: 240}}>
+              <View style={{ width: 240 }}>
                 <Subtitle styleName="h-center">
                   {selectedItemKey
                     ? 'EDIT PRODUCT ITEM'
@@ -1088,7 +1093,7 @@ export class ManageMarketScreen extends Component {
                       confirmationInfo: 'Confirm to Delete ?',
                     });
                   }}>
-                  <Caption style={{color: 'red'}}>DELETE</Caption>
+                  <Caption style={{ color: 'red' }}>DELETE</Caption>
                 </Button>
               )
             }
@@ -1126,7 +1131,7 @@ export class ManageMarketScreen extends Component {
                       resizeMode: 'contain',
                     }}>
                     <Image
-                      style={{backgroundColor: '#f2f2f2'}}
+                      style={{ backgroundColor: '#f2f2f2' }}
                       styleName="medium-square"
                       source={{
                         uri: productPic,
@@ -1137,13 +1142,13 @@ export class ManageMarketScreen extends Component {
 
                 <View styleName="stretch md-gutter-top">
                   <Button
-                    style={{elevation: 3}}
+                    style={{ elevation: 3 }}
                     styleName="secondary full-width"
                     onPress={this._handleProductPic}>
                     <Text>TAP HERE TO CHANGE PRODUCT PIC</Text>
                   </Button>
                   {error && error.errorType === 'productPic' && (
-                    <Caption style={{color: 'red'}}>{error.errorMsg}</Caption>
+                    <Caption style={{ color: 'red' }}>{error.errorMsg}</Caption>
                   )}
                 </View>
               </View>
@@ -1152,14 +1157,14 @@ export class ManageMarketScreen extends Component {
                 <Caption>Product Name:</Caption>
                 <View styleName="horizontal stretch">
                   <TextInput
-                    style={{flex: 1, elevation: 3, textAlign: 'center'}}
+                    style={{ flex: 1, elevation: 3, textAlign: 'center' }}
                     value={productName || null}
                     placeholder="Product Name"
                     onChangeText={this._handleProductName}
                   />
                 </View>
                 {error && error.errorType === 'productName' && (
-                  <Caption style={{color: 'red'}}>{error.errorMsg}</Caption>
+                  <Caption style={{ color: 'red' }}>{error.errorMsg}</Caption>
                 )}
               </View>
 
@@ -1167,7 +1172,7 @@ export class ManageMarketScreen extends Component {
                 <Caption>Product Type:</Caption>
                 <View styleName="horizontal stretch">
                   <Button
-                    style={{elevation: 3}}
+                    style={{ elevation: 3 }}
                     styleName="full-width"
                     onPress={() => {
                       this.setState({
@@ -1183,7 +1188,7 @@ export class ManageMarketScreen extends Component {
                   </Button>
                 </View>
                 {error && error.errorType === 'selectedProductType' && (
-                  <Caption style={{color: 'red'}}>{error.errorMsg}</Caption>
+                  <Caption style={{ color: 'red' }}>{error.errorMsg}</Caption>
                 )}
               </View>
 
@@ -1192,7 +1197,7 @@ export class ManageMarketScreen extends Component {
                   <Caption>Product Variants:</Caption>
                   {selectedItemKey && (
                     <Button
-                      style={{paddingLeft: 5, paddingRight: 0}}
+                      style={{ paddingLeft: 5, paddingRight: 0 }}
                       styleName="secondary"
                       onPress={() => {
                         this.setState({
@@ -1205,8 +1210,8 @@ export class ManageMarketScreen extends Component {
                           error: false,
                         });
                       }}>
-                      <Caption style={{color: 'white'}}>ADD</Caption>
-                      <Icon style={{margin: 0}} name="plus-button" />
+                      <Caption style={{ color: 'white' }}>ADD</Caption>
+                      <Icon style={{ margin: 0 }} name="plus-button" />
                     </Button>
                   )}
                 </View>
@@ -1214,7 +1219,7 @@ export class ManageMarketScreen extends Component {
 
                 {!productVariants && !selectedItemKey && (
                   <View styleName="stretch horizontal h-center v-center lg-gutter-top lg-gutter-bottom">
-                    <Caption style={{color: Colors.Dark}} styleName="h-center">
+                    <Caption style={{ color: Colors.Dark }} styleName="h-center">
                       YOU MUST SAVE YOUR PRODUCT FIRST BEFORE ADDING VARIANTS
                     </Caption>
                   </View>
@@ -1244,12 +1249,12 @@ export class ManageMarketScreen extends Component {
                         <Divider styleName="line" />
                         <View styleName="md-gutter horizontal v-center space-between">
                           <View styleName="flexible">
-                            <Caption style={{color: Colors.Dark}}>
+                            <Caption style={{ color: Colors.Dark }}>
                               {value.variantName}
                             </Caption>
                           </View>
                           <View styleName="flexible horizontal h-center">
-                            <Caption style={{color: 'red'}}>
+                            <Caption style={{ color: 'red' }}>
                               RM {value.price.toFixed(2)}
                             </Caption>
                           </View>
@@ -1321,7 +1326,7 @@ export class ManageMarketScreen extends Component {
                             }}
                             data={value.photos}
                             keyExtractor={item => item.id}
-                            renderItem={({item}) => (
+                            renderItem={({ item }) => (
                               <Lightbox
                                 style={{
                                   marginTop: 1,
@@ -1360,7 +1365,7 @@ export class ManageMarketScreen extends Component {
             <View styleName="stretch horizontal md-gutter-left md-gutter-right md-gutter-bottom">
               <Button
                 styleName="full-width"
-                style={{elevation: 3}}
+                style={{ elevation: 3 }}
                 onPress={() => {
                   if (isProductModified) {
                     this.setState({
@@ -1385,7 +1390,7 @@ export class ManageMarketScreen extends Component {
                     ? 'full-width secondary'
                     : 'full-width muted'
                 }
-                style={{elevation: 3}}
+                style={{ elevation: 3 }}
                 disabled={!isProductModified}
                 onPress={() => {
                   if (selectedItemKey) {
@@ -1426,7 +1431,7 @@ export class ManageMarketScreen extends Component {
         </Modal>
 
         <Modal
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           isVisible={isVariantEditorVisible}
           useNativeDriver={true}
           hideModalContentWhileAnimating={true}
@@ -1446,7 +1451,7 @@ export class ManageMarketScreen extends Component {
           }}>
           <NavigationBar
             style={{
-              container: {elevation: 3, height: 56},
+              container: { elevation: 3, height: 56 },
             }}
             styleName="inline"
             leftComponent={
@@ -1470,7 +1475,7 @@ export class ManageMarketScreen extends Component {
               </Button>
             }
             centerComponent={
-              <View style={{width: 240}}>
+              <View style={{ width: 240 }}>
                 <Subtitle styleName="h-center">
                   {selectedProductVariant
                     ? 'EDIT PRODUCT VARIANT'
@@ -1489,7 +1494,7 @@ export class ManageMarketScreen extends Component {
                       confirmationInfo: 'Confirm to Delete ?',
                     });
                   }}>
-                  <Caption style={{color: 'red'}}>DELETE</Caption>
+                  <Caption style={{ color: 'red' }}>DELETE</Caption>
                 </Button>
               )
             }
@@ -1507,14 +1512,14 @@ export class ManageMarketScreen extends Component {
                 <Caption>Variant Name:</Caption>
                 <View styleName="horizontal stretch">
                   <TextInput
-                    style={{flex: 1, elevation: 3, textAlign: 'center'}}
+                    style={{ flex: 1, elevation: 3, textAlign: 'center' }}
                     value={variantName || null}
                     placeholder="Variant Name"
                     onChangeText={this._handleVariantName}
                   />
                 </View>
                 {error && error.errorType === 'variantName' && (
-                  <Caption style={{color: 'red'}}>{error.errorMsg}</Caption>
+                  <Caption style={{ color: 'red' }}>{error.errorMsg}</Caption>
                 )}
               </View>
 
@@ -1544,7 +1549,7 @@ export class ManageMarketScreen extends Component {
                   />
                 </View>
                 {error && error.errorType === 'price' && (
-                  <Caption style={{color: 'red'}}>{error.errorMsg}</Caption>
+                  <Caption style={{ color: 'red' }}>{error.errorMsg}</Caption>
                 )}
               </View>
 
@@ -1567,7 +1572,7 @@ export class ManageMarketScreen extends Component {
                   />
                 </View>
                 {error && error.errorType === 'quantity' && (
-                  <Caption style={{color: 'red'}}>{error.errorMsg}</Caption>
+                  <Caption style={{ color: 'red' }}>{error.errorMsg}</Caption>
                 )}
               </View>
 
@@ -1576,11 +1581,11 @@ export class ManageMarketScreen extends Component {
                   <Caption>Photos:</Caption>
                   {photos && (
                     <Button
-                      style={{paddingLeft: 5, paddingRight: 0}}
+                      style={{ paddingLeft: 5, paddingRight: 0 }}
                       styleName="secondary"
                       onPress={this._addVariantPhotos}>
-                      <Caption style={{color: 'white'}}>ADD</Caption>
-                      <Icon style={{margin: 0}} name="plus-button" />
+                      <Caption style={{ color: 'white' }}>ADD</Caption>
+                      <Icon style={{ margin: 0 }} name="plus-button" />
                     </Button>
                   )}
                 </View>
@@ -1589,7 +1594,7 @@ export class ManageMarketScreen extends Component {
 
                 {!photos && !selectedProductVariant && (
                   <View styleName="stretch horizontal h-center v-center lg-gutter-top lg-gutter-bottom">
-                    <Caption style={{color: Colors.Dark}} styleName="h-center">
+                    <Caption style={{ color: Colors.Dark }} styleName="h-center">
                       YOU MUST SAVE YOUR VARIANTS FIRST BEFORE ADDING PHOTOS
                     </Caption>
                   </View>
@@ -1639,11 +1644,11 @@ export class ManageMarketScreen extends Component {
                       </Lightbox>
                       <View styleName="flexible vertical v-center md-gutter">
                         <Button
-                          style={{elevation: 3, padding: 15}}
+                          style={{ elevation: 3, padding: 15 }}
                           onPress={() => {
                             this._deleteVariantPhotos(value.id);
                           }}>
-                          <Caption style={{color: 'red'}}>DELETE</Caption>
+                          <Caption style={{ color: 'red' }}>DELETE</Caption>
                         </Button>
                       </View>
                     </View>
@@ -1654,7 +1659,7 @@ export class ManageMarketScreen extends Component {
             <View styleName="stretch horizontal md-gutter-left md-gutter-right md-gutter-bottom">
               <Button
                 styleName="full-width"
-                style={{elevation: 3}}
+                style={{ elevation: 3 }}
                 onPress={() => {
                   if (isVariantModified) {
                     this.setState({
@@ -1679,7 +1684,7 @@ export class ManageMarketScreen extends Component {
                     ? 'full-width secondary'
                     : 'full-width muted'
                 }
-                style={{elevation: 3}}
+                style={{ elevation: 3 }}
                 disabled={!isVariantModified}
                 onPress={() => {
                   if (selectedProductVariant) {
@@ -1744,12 +1749,12 @@ export class ManageMarketScreen extends Component {
             </View>
 
             <FlatList
-              style={{flexGrow: 0}}
+              style={{ flexGrow: 0 }}
               data={productTypes}
               keyExtractor={item => item.productTypeKey}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <Button
-                  style={{elevation: 3}}
+                  style={{ elevation: 3 }}
                   styleName="secondary md-gutter-bottom"
                   onPress={() => {
                     this.setState({
@@ -1779,14 +1784,14 @@ export class ManageMarketScreen extends Component {
               isConfirmationVisible: false,
             });
           }}>
-          <View style={{backgroundColor: 'white', padding: 15}}>
+          <View style={{ backgroundColor: 'white', padding: 15 }}>
             <View styleName="stretch">
               <Subtitle styleName="sm-gutter-bottom">CONFIRMATION</Subtitle>
             </View>
             <View styleName="stretch sm-gutter-top md-gutter-bottom">
               <Divider styleName="line" />
               <Text
-                style={{color: 'red'}}
+                style={{ color: 'red' }}
                 styleName="h-center lg-gutter-top lg-gutter-bottom">
                 {confirmationInfo}
               </Text>
@@ -1794,7 +1799,7 @@ export class ManageMarketScreen extends Component {
             </View>
             <View styleName="stretch horizontal">
               <Button
-                style={{elevation: 3}}
+                style={{ elevation: 3 }}
                 styleName="full-width"
                 onPress={() => {
                   this.setState({
@@ -1806,7 +1811,7 @@ export class ManageMarketScreen extends Component {
               </Button>
 
               <Button
-                style={{elevation: 3}}
+                style={{ elevation: 3 }}
                 styleName="full-width secondary"
                 onPress={() => {
                   if (
@@ -1849,11 +1854,11 @@ export class ManageMarketScreen extends Component {
         </Modal>
 
         <Modal
-          style={{margin: 96}}
+          style={{ margin: 96 }}
           isVisible={isLoaderVisible}
           useNativeDriver={true}
           hideModalContentWhileAnimating={true}>
-          <View style={{backgroundColor: 'white', padding: 15}}>
+          <View style={{ backgroundColor: 'white', padding: 15 }}>
             <View styleName="horizontal h-center v-center">
               <ActivityIndicator size="large" color={Colors.Dark} />
               <Caption styleName="md-gutter-left">LOADING...</Caption>
