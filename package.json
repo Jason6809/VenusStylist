@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@shoutem/ui": "^1.0.1",
+    "@shoutem/ui": "^6.1.0",
     "moment": "^2.24.0",
     "react": "16.9.0",
     "react-native": "^0.63.4",
